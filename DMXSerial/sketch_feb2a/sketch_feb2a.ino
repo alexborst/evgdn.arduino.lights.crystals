@@ -1,26 +1,27 @@
 #include <DMXSerial.h>
+#include <SoftwareSerial.h>
+
+SoftwareSerial mySerial(10, 11); // RX, TX on digital pins 10 and 11
 
 void setup() {
-    Serial.begin(9600); // Start the Serial Monitor
-    DMXSerial.init(DMXReceiver); // Initialize DMX in Receiver mode
-    Serial.println("DMX Receiver Ready");
+    mySerial.begin(9600); // Use SoftwareSerial for debugging
+    DMXSerial.init(DMXReceiver); // Initialize DMX receiver mode
+    mySerial.println("DMX Receiver Ready");
 }
 
 void loop() {
     static uint32_t lastPrintTime = 0;
     uint32_t currentTime = millis();
 
-    // Print values every second to avoid spamming the Serial Monitor
     if (currentTime - lastPrintTime >= 1000) {
-        Serial.print("DMX Data: ");
+        mySerial.print("DMX Data: ");
         
-        // Read and display the first 10 DMX channels (1-10)
         for (int i = 1; i <= 10; i++) {
-            Serial.print(DMXSerial.read(i));
-            Serial.print(" ");
+            mySerial.print(DMXSerial.read(i));
+            mySerial.print(" ");
         }
 
-        Serial.println(); // New line for readability
+        mySerial.println();
         lastPrintTime = currentTime;
     }
 }

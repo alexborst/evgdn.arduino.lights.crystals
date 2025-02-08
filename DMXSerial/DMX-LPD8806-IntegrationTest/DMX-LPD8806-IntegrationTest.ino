@@ -20,46 +20,63 @@ int stripNo1 = 1;
 int dataPin1  = 12;
 int clockPin1 = 11;
 int dmxFunctionChannel1 = 1;
-int dmxColorChannel1 = 2;
+int dmxRColorChannel1 = 2;
+int dmxGColorChannel1 = 3;
+int dmxBColorChannel1 = 4;
 
 ///// STRIP 2 /////
 int stripNo2 = 2;
 int dataPin2  = 10;
 int clockPin2 = 9;
-int dmxFunctionChannel2 = 3;
-int dmxColorChannel2 = 4;
+int dmxFunctionChannel2 = 5;
+int dmxRColorChannel2 = 6;
+int dmxGColorChannel2 = 7;
+int dmxBColorChannel2 = 8;
 
 ///// STRIP 3 /////
 int stripNo3 = 3;
 int dataPin3  = 8;
 int clockPin3 = 7;
-int dmxFunctionChannel3 = 5;
-int dmxColorChannel3 = 6;
+int dmxFunctionChannel3 = 9;
+int dmxRColorChanne3 = 10;
+int dmxGColorChannel3 = 11;
+int dmxBColorChannel3 = 12;
 
 ///// STRIP 4 /////
 int stripNo4 = 4;
 int dataPin4  = 6;
 int clockPin4 = 5;
-int dmxFunctionChannel4 = 7;
-int dmxColorChannel4 = 8;
+int dmxFunctionChannel4 = 13;
+int dmxRColorChannel4 = 14;
+int dmxGColorChannel4 = 15;
+int dmxBColorChannel4 = 16;
 
 
-  int lightFunction1 = 0;
-  int color1 = 0;
-  int lightFunction2 = 0;
-  int color2 = 0;
-  int lightFunction3 = 0;
-  int color3 = 0;
-  int lightFunction4 = 0;
-  int color4 = 0;
+int lightFunction1 = 0;
+int rColor1 = 0;
+int gColor1 = 0;
+int bColor1 = 0;
+
+
+int lightFunction2 = 0;
+int rColor2 = 0;
+int gColor2 = 0;
+int bColor2 = 0;
+
+int lightFunction3 = 0;
+int rColor3 = 0;
+int gColor3 = 0;
+int bColor3 = 0;
+
+int lightFunction4 = 0;
+int rColor4 = 0;
+int gColor4 = 0;
+int bColor4 = 0;
 
 //#define SLAVE_CHANNELS 1
 
 DMX_Slave dmx_slave(1);
 
-// First parameter is the number of LEDs in the strand.  The LED strips
-// are 32 LEDs per meter but you can extend or cut the strip.  Next two
-// parameters are SPI data and clock pins:
 LPD8806 strip1 = LPD8806(nLEDs, dataPin1, clockPin1);
 LPD8806 strip2 = LPD8806(nLEDs, dataPin2, clockPin2);
 LPD8806 strip3 = LPD8806(nLEDs, dataPin3, clockPin3);
@@ -70,12 +87,6 @@ LPD8806 strip4 = LPD8806(nLEDs, dataPin4, clockPin4);
 
 
 void setup() {
-  // put your setup code here, to run once:
-    //Serial.begin(9600);  // Start serial communication for monitoring
-    //DMXSerial.init(DMXReceiver);  // Initialize DMX in receiver mode
-    //Serial.println("DMX Receiver Ready");
-
-
   #if defined(__AVR_ATtiny85__) && (F_CPU == 16000000L)
     clock_prescale_set(clock_div_1); // Enable 16 MHz on Trinket
   #endif
@@ -112,35 +123,31 @@ void loop() {
   // 6. theaterChase
   // 7. theaterChaseRainbow
 
-  // put your main code here, to run repeatedly:
-    // Check if new data has been received
-    //colorChase(1, strip1.Color(0,   127, 0), 50); // Green
-    callStripFuntion(2, 2, strip1.Color(0, 127, 0)); // Green
-    callStripFuntion(3, 2, strip1.Color(0, 0, 127)); // Blue
-    callStripFuntion(4, 2, strip1.Color(127,   0, 0)); // Red
 
-      // ///// STRIP 1 /////
-      // lightFunction1 = dmx_slave.getChannelValue(dmxFunctionChannel1);
-      // color1 = dmx_slave.getChannelValue(dmxColorChannel1);
-      // callStripFuntion(stripNo1, lightFunction1, color1);
+  callStripFuntion(2, 2, strip1.Color(0, 127, 0)); // Green
+  callStripFuntion(3, 2, strip1.Color(0, 0, 127)); // Blue
+  callStripFuntion(4, 2, strip1.Color(127,   0, 0)); // Red
 
-      // ///// STRIP 2 /////
-      // lightFunction2 = dmx_slave.getChannelValue(dmxFunctionChannel2);
-      // color2 = dmx_slave.getChannelValue(dmxColorChannel2);
-      // callStripFuntion(stripNo2, lightFunction2, color2);
+    // Check if new DMX data has been received
+    // ///// STRIP 1 /////
+    lightFunction1 = dmx_slave.getChannelValue(dmxFunctionChannel1);
+    rColor1 = dmx_slave.getChannelValue(dmxRColorChannel1);
+    gColor1 = dmx_slave.getChannelValue(dmxGColorChannel1);
+    bColor1 = dmx_slave.getChannelValue(dmxBColorChannel1);
+    callStripFuntion(stripNo1, lightFunction1, strip1.Color(rColor1, gColor1, bColor1));
 
-      // ///// STRIP 3 /////
-      // lightFunction3 = dmx_slave.getChannelValue(dmxFunctionChannel3);
-      // color3 = dmx_slave.getChannelValue(dmxColorChannel3);
-      // callStripFuntion(stripNo3, lightFunction3, color3);
+    // ///// STRIP 2 /////
+    lightFunction2 = dmx_slave.getChannelValue(dmxFunctionChannel2);
+    rColor2 = dmx_slave.getChannelValue(dmxRColorChannel2);
+    gColor2 = dmx_slave.getChannelValue(dmxGColorChannel2);
+    bColor2 = dmx_slave.getChannelValue(dmxBColorChannel2);
+    callStripFuntion(stripNo2, lightFunction2, strip2.Color(rColor2, gColor2, bColor2));
 
-      // ///// STRIP 4 /////
-      // lightFunction4 = dmx_slave.getChannelValue(dmxFunctionChannel4);
-      // color4 = dmx_slave.getChannelValue(dmxColorChannel4);
-      // callStripFuntion(stripNo4, lightFunction4, color4);
+    // ///// STRIP 3 /////
 
 
-    //colorChase(4, strip4.Color(127,   0, 0), 50); // Red
+    // ///// STRIP 4 /////
+    
 }
 
 void callStripFuntion(int stripNo, int lightFunction, uint32_t color)
